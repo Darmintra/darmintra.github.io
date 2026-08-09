@@ -1,143 +1,275 @@
+/* Darmintra Tandrawijaya — portfolio
+   Plain CSS, no build step, no webfonts. */
+
+:root {
+    --ink:        #1a1d21;
+    --body:       #35393f;
+    --muted:      #6b7280;
+    --rule:       #e5e7eb;
+    --rule-soft:  #f0f1f3;
+    --surface:    #f6f7f8;
+    --accent:     #7a4a2b;   /* used once, on the name only */
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 0 20px;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--body);
+    background: #fff;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 56px 24px 0;
+    -webkit-font-smoothing: antialiased;
 }
 
-h1, h2 {
-    color: #111;
+/* ---------- Type scale ---------- */
+
+h1, h2, h3 {
+    color: var(--ink);
+    line-height: 1.25;
 }
+
+h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+}
+
+.hanzi {
+    font-weight: 400;
+    color: var(--accent);
+    margin-left: 4px;
+}
+
+h2 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--muted);
+    margin: 0 0 18px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+}
+
+h3 {
+    font-size: 1.05rem;
+    font-weight: 650;
+    margin: 0 0 4px;
+}
+
+p {
+    margin: 0 0 14px;
+}
+
+/* ---------- Header ---------- */
 
 header {
-    margin-bottom: 40px;
-    border-bottom: 1px solid #eaeaea;
-    padding-bottom: 20px;
+    margin-bottom: 44px;
 }
 
-/* --- ADDED: Color for your Security Architect title --- */
 .job-title {
-    color: #B22222; /* Deep Firebrick Red */
-    font-weight: 600;
+    color: var(--body);
+    font-size: 0.95rem;
+    margin: 0 0 12px;
 }
+
+.links {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.links a {
+    color: var(--body);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+}
+
+.links a:hover,
+.links a:focus-visible {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+}
+
+.sep {
+    color: var(--rule);
+    margin: 0 8px;
+}
+
+a:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+/* ---------- Sections ---------- */
 
 section {
-    margin-bottom: 30px;
+    margin-bottom: 44px;
 }
 
-ul {
-    padding-left: 20px;
-}
-
-li {
-    margin-bottom: 15px;
-}
-
-/* --- ADDED: Styling for the Areas of Interest Tags --- */
-.tags span {
-    display: inline-block;
-    background-color: #f4f4f4;
-    padding: 5px 12px;
-    margin: 0 8px 8px 0;
-    border-radius: 4px;
-    font-size: 0.9em;
-    color: #333;
-    border: 1px solid #ddd;
-}
-
-footer {
-    margin-top: 50px;
-    font-size: 0.9em;
-    color: #666;
-    border-top: 1px solid #eaeaea;
-    padding-top: 15px;
-}
-/* --- ADDED: Currently list --- */
-.now {
-    padding-left: 0;
-    list-style: none;
-}
-.now li {
-    margin-bottom: 6px;
-}
-
-/* --- ADDED: Intro note above research entries --- */
 .note {
-    color: #666;
-    font-size: 0.9em;
-    margin-bottom: 25px;
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin-bottom: 12px;
 }
 
-/* --- ADDED: Security research entry --- */
+.note + .note {
+    margin-bottom: 24px;
+}
+
+/* ---------- Entries ---------- */
+
 .entry {
-    border: 1px solid #eaeaea;
-    border-radius: 4px;
-    padding: 20px 24px;
-    margin-bottom: 20px;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 22px 24px;
+    margin-bottom: 18px;
 }
-.entry h3 {
-    color: #111;
-    font-size: 1.15em;
-    margin: 0 0 12px;
+
+.entry:last-child {
+    margin-bottom: 0;
 }
-.entry p {
-    margin: 0 0 12px;
-}
+
 .entry p:last-of-type {
     margin-bottom: 0;
 }
+
 .entry ul {
+    margin: 0 0 14px;
+    padding-left: 20px;
+}
+
+.entry li {
+    margin-bottom: 5px;
+}
+
+.role {
+    color: var(--muted);
+    font-size: 0.85rem;
     margin: 0 0 12px;
 }
-.entry li {
-    margin-bottom: 4px;
-}
 
-/* --- ADDED: Disposition tag (matches the .tags pill pattern) --- */
+/* Disposition: neutral, not a failure state.
+   Red here reads as "this went wrong" before a word is read. */
 .disposition {
     display: inline-block;
-    background-color: #fdf5f5;
-    border: 1px solid #e8cccc;
-    border-radius: 4px;
-    padding: 4px 10px;
-    margin-bottom: 14px;
-    font-size: 0.78em;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 3px 9px;
+    margin: 0 0 12px;
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
-    color: #B22222;
+    color: var(--muted);
 }
 
-/* --- ADDED: Entry metadata --- */
+/* ---------- Metadata blocks ---------- */
+
 .meta {
     display: grid;
-    grid-template-columns: 90px 1fr;
-    gap: 2px 16px;
-    margin: 18px 0 0;
-    padding-top: 14px;
-    border-top: 1px solid #eaeaea;
-    font-size: 0.85em;
-    color: #666;
-}
-.meta dt {
-    font-weight: 600;
-}
-.meta dd {
-    margin: 0;
-    color: #333;
+    grid-template-columns: 92px 1fr;
+    gap: 4px 20px;
+    margin: 20px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule-soft);
+    font-size: 0.85rem;
 }
 
-@media (max-width: 520px) {
+.meta dt {
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.meta dd {
+    margin: 0;
+    color: var(--body);
+}
+
+.credentials {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+    font-size: 0.95rem;
+    gap: 6px 20px;
+}
+
+/* ---------- Footer ---------- */
+
+footer {
+    margin-top: 56px;
+    padding: 16px 0 40px;
+    border-top: 1px solid var(--rule);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+footer p {
+    margin: 0;
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 560px) {
+    body {
+        font-size: 16px;
+        padding: 36px 18px 0;
+    }
+    h1 {
+        font-size: 1.5rem;
+    }
+    .entry {
+        padding: 18px;
+    }
     .meta {
         grid-template-columns: 1fr;
         gap: 0;
     }
     .meta dt {
-        margin-top: 10px;
+        margin-top: 12px;
+    }
+    .meta dt:first-of-type {
+        margin-top: 0;
+    }
+    .credentials dt {
+        margin-top: 12px;
+    }
+}
+
+/* ---------- Print ---------- */
+
+@media print {
+    body {
+        max-width: none;
+        font-size: 11pt;
+        color: #000;
     }
     .entry {
-        padding: 18px;
+        break-inside: avoid;
+        border-color: #ccc;
     }
+    .links a::after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        color: #555;
+    }
+}
+.postnominals {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin: 0 0 10px;
 }
