@@ -73,7 +73,23 @@ p {
 /* ---------- Header ---------- */
 
 header {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
     margin-bottom: 44px;
+}
+
+.portrait {
+    width: 112px;
+    height: 112px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid var(--rule);
+}
+
+.identity {
+    min-width: 0;
 }
 
 .job-title {
@@ -110,7 +126,13 @@ a:focus-visible {
     outline-offset: 3px;
     border-radius: 2px;
 }
-
+.postnominals {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin: 0 0 10px;
+}
 /* ---------- Sections ---------- */
 
 section {
@@ -226,6 +248,13 @@ footer p {
     body {
         font-size: 16px;
         padding: 36px 18px 0;
+    }
+   header {
+        gap: 16px;
+    }
+    .portrait {
+        width: 84px;
+        height: 84px;
     }
     h1 {
         font-size: 1.5rem;
