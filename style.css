@@ -54,3 +54,90 @@ footer {
     border-top: 1px solid #eaeaea;
     padding-top: 15px;
 }
+/* --- ADDED: Currently list --- */
+.now {
+    padding-left: 0;
+    list-style: none;
+}
+.now li {
+    margin-bottom: 6px;
+}
+
+/* --- ADDED: Intro note above research entries --- */
+.note {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 25px;
+}
+
+/* --- ADDED: Security research entry --- */
+.entry {
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+}
+.entry h3 {
+    color: #111;
+    font-size: 1.15em;
+    margin: 0 0 12px;
+}
+.entry p {
+    margin: 0 0 12px;
+}
+.entry p:last-of-type {
+    margin-bottom: 0;
+}
+.entry ul {
+    margin: 0 0 12px;
+}
+.entry li {
+    margin-bottom: 4px;
+}
+
+/* --- ADDED: Disposition tag (matches the .tags pill pattern) --- */
+.disposition {
+    display: inline-block;
+    background-color: #fdf5f5;
+    border: 1px solid #e8cccc;
+    border-radius: 4px;
+    padding: 4px 10px;
+    margin-bottom: 14px;
+    font-size: 0.78em;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #B22222;
+}
+
+/* --- ADDED: Entry metadata --- */
+.meta {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 2px 16px;
+    margin: 18px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid #eaeaea;
+    font-size: 0.85em;
+    color: #666;
+}
+.meta dt {
+    font-weight: 600;
+}
+.meta dd {
+    margin: 0;
+    color: #333;
+}
+
+@media (max-width: 520px) {
+    .meta {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    .meta dt {
+        margin-top: 10px;
+    }
+    .entry {
+        padding: 18px;
+    }
+}
