@@ -12,44 +12,171 @@
         <header>
             <h1>Darmintra Tandrawijaya (陳明智)</h1>
             <p>Security Architect</p>
-            <p></p>
             <div class="links">
                 <a href="https://linkedin.com/in/darmintra" target="_blank" rel="noopener noreferrer">Linkedin</a> | 
                 <a href="https://github.com/darmintra" target="_blank" rel="noopener noreferrer">GitHub</a> | 
                 <a href="mailto:darmintratan@gmail.com">Email</a>
             </div>
         </header>
-
         <!-- About Me Section -->
         <section>
             <h2>About Me</h2>
-            <p>I am a client-facing Cybersecurity Architect with over nine years of experience driving secure transformations at global firms including IBM, Accenture, and NTT. I specialize in evaluating and validating enterprise security architectures to ensure solutions are resilient, fit-for-purpose, and aligned with organizational risk postures. My technical and governance expertise is backed by industry-leading certifications, including the CISSP-ISSAP, CCSP, TAISE, CAISP and CISM.</p>
+            <p>I am a client-facing Cybersecurity Architect with nine years of experience driving secure transformations at global firms including IBM, Accenture, and NTT. I specialize in securing AI systems and agents — trust boundaries, authorization design, and deriving controls from business risk rather than from a checklist — alongside evaluating enterprise security architectures to ensure solutions are resilient, fit-for-purpose, and aligned with organizational risk postures. My technical and governance expertise is backed by industry-leading certifications, including the CISSP-ISSAP, CCSP and CISM.</p>
         </section>
-
-        <!-- Research / Projects Section -->
+        <!-- Currently Section -->
         <section>
-            <h2>Publications & Projects</h2>
-            <ul>
-                <li>
-                    <strong>Your Publication Title</strong><br>
-                    Author Names<br>
-                    <em>Conference or Journal Name, Year</em> | <a href="#">paper</a>
-                </li>
+            <h2>Currently</h2>
+            <ul class="now">
+                <li><strong>Studying</strong> — CAISP (Certified AI Security Professional), in progress</li>
+                <li><strong>Studying</strong> — TAISE (Trusted AI Safety Expert), in progress</li>
+                <li><strong>Reading</strong> — MBA, NUS Business School, expected 2027</li>
+                <li><strong>Hunting</strong> — active on public vulnerability disclosure programmes</li>
             </ul>
         </section>
+        <!-- Security Research Section -->
         <section>
-    <h2>Core Expertise</h2>
-    <div class="tags">
-        <span>Enterprise Architecture</span>
-        <span>Cloud Security</span>
-        <span>Risk Governance</span>
-        <span>Zero Trust</span>
-    </div>
-        </section>
+            <h2>Security Research</h2>
+            <p class="note">Findings from authorised bug bounty engagements, published with their real dispositions. Targets are anonymised and no payloads or extracted contents are reproduced.</p>
 
+            <article class="entry">
+                <span class="disposition">Duplicate — independently identified</span>
+                <h3>System prompt disclosure in a production LLM agent</h3>
+                <p>A public-sector AI assistant returned its complete system prompt in response to a plain conversational question — no jailbreak, no obfuscation, no technical knowledge required. A second phrasing, asking the agent to summarise its own context, produced the same disclosure, indicating the model had no notion that its instructions were meant to be confidential.</p>
+                <p>The interesting part was not the extraction but the impact analysis. A leaked system prompt hands an attacker the map to every guardrail the agent has. In this case it also exposed two things the operator had not intended to publish:</p>
+                <ul>
+                    <li>A third-party vendor relationship the prompt explicitly instructed the agent never to mention</li>
+                    <li>Internal platform architecture — document handling, citation structure, and internal identifier formats</li>
+                </ul>
+                <p>My recommendations went beyond the single agent: audit every agent on the platform with the same extraction prompt to establish whether the issue was systemic, filter known extraction patterns at the platform layer rather than per-agent, and treat the prompt layer as non-confidential by design — no vendor names, no secrets, nothing that cannot survive disclosure.</p>
+                <p>Another researcher had reported the same issue first, so the report was closed as a duplicate.</p>
+                <dl class="meta">
+                    <dt>Class</dt><dd>Improper neutralisation of input used for LLM prompting (CWE-1427)</dd>
+                    <dt>Mapping</dt><dd>OWASP LLM Top 10 — System Prompt Leakage; MITRE ATLAS</dd>
+                    <dt>Severity</dt><dd>CVSS 3.1 — 3.5 Low</dd>
+                    <dt>Date</dt><dd>May 2026</dd>
+                </dl>
+            </article>
+
+            <article class="entry">
+                <span class="disposition">Not exploitable — control confirmed effective</span>
+                <h3>Client-supplied identifier in a national-identity password reset flow</h3>
+                <p>A password reset flow authenticated by a national digital identity service also accepted a client-supplied account identifier in the request body. If the server derived the target account from that value rather than from the authenticated identity, any authenticated user could reset another user's password.</p>
+                <p>I could not prove it either way without testing against an account I did not own, which the programme rules prohibited. Rather than test anyway, I documented the attack chain, said plainly that my proof of concept only demonstrated self-context, and asked the security team for either a test account or an internal code review.</p>
+                <p>They provided a test account. I ran the cross-account test and the server rejected it — the identifier is validated against the authenticated identity server-side. I reported that my own finding was wrong and the report was closed accordingly.</p>
+                <p>One design observation survives the negative result. The identifier does not need to be in the client request at all: the server already holds the authenticated identity and can resolve the account internally. Leaving it client-controlled means correctness now depends on a validation check that must never regress — a single-layer defence where no layer was necessary. Sound implementation, avoidable design surface.</p>
+                <dl class="meta">
+                    <dt>Class</dt><dd>Hypothesised authorization bypass through user-controlled key (CWE-639)</dd>
+                    <dt>Method</dt><dd>Mid-flow interception of the authentication callback</dd>
+                    <dt>Outcome</dt><dd>Server-side validation verified present and effective</dd>
+                    <dt>Date</dt><dd>May–June 2026</dd>
+                </dl>
+            </article>
+        </section>
+        <!-- Core Expertise Section -->
+        <section>
+            <h2>Core Expertise</h2>
+            <div class="tags">
+                <span>Securing AI Systems &amp; Agents</span>
+                <span>Enterprise Architecture</span>
+                <span>Cloud Security</span>
+                <span>Risk Governance</span>
+                <span>Zero Trust</span>
+            </div>
+        </section>
         <!-- Footer -->
         <footer>
-            <p>&copy; 2026 Darmintra Tandrawijaya · Built with plain HTML & CSS · Hosted on GitHub Pages</p>
+            <p>&copy; 2026 Darmintra Tandrawijaya · Built with plain HTML &amp; CSS · Hosted on GitHub Pages</p>
+        </footer>
+    </div>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darmintra Tandrawijaya - Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header / Bio Section -->
+        <header>
+            <h1>Darmintra Tandrawijaya (陳明智)</h1>
+            <p>Security Architect</p>
+            <div class="links">
+                <a href="https://linkedin.com/in/darmintra" target="_blank" rel="noopener noreferrer">Linkedin</a> | 
+                <a href="https://github.com/darmintra" target="_blank" rel="noopener noreferrer">GitHub</a> | 
+                <a href="mailto:darmintratan@gmail.com">Email</a>
+            </div>
+        </header>
+        <!-- About Me Section -->
+        <section>
+            <h2>About Me</h2>
+            <p>I am a client-facing Cybersecurity Architect with ten years of experience driving secure transformations at global firms including IBM, Accenture, and NTT. I specialize in securing AI systems and agents — trust boundaries, authorization design, and deriving controls from business risk rather than from a checklist — alongside evaluating enterprise security architectures to ensure solutions are resilient, fit-for-purpose, and aligned with organizational risk postures. My technical and governance expertise is backed by industry-leading certifications, including the CISSP-ISSAP, CCSP and CISM.</p>
+        </section>
+        <!-- Currently Section -->
+        <section>
+            <h2>Currently</h2>
+            <ul class="now">
+                <li><strong>Studying</strong> — CAISP (Certified AI Security Professional), in progress</li>
+                <li><strong>Studying</strong> — TAISE (Trusted AI Safety Expert), in progress</li>
+                <li><strong>Reading</strong> — MBA, NUS Business School, expected 2027</li>
+                <li><strong>Hunting</strong> — active on public vulnerability disclosure programmes</li>
+            </ul>
+        </section>
+        <!-- Security Research Section -->
+        <section>
+            <h2>Security Research</h2>
+            <p class="note">Findings from authorised bug bounty engagements, published with their real dispositions. Targets are anonymised and no payloads or extracted contents are reproduced.</p>
+
+            <article class="entry">
+                <span class="disposition">Duplicate — independently identified</span>
+                <h3>System prompt disclosure in a production LLM agent</h3>
+                <p>A public-sector AI assistant returned its complete system prompt in response to a plain conversational question — no jailbreak, no obfuscation, no technical knowledge required. A second phrasing, asking the agent to summarise its own context, produced the same disclosure, indicating the model had no notion that its instructions were meant to be confidential.</p>
+                <p>The interesting part was not the extraction but the impact analysis. A leaked system prompt hands an attacker the map to every guardrail the agent has. In this case it also exposed two things the operator had not intended to publish:</p>
+                <ul>
+                    <li>A third-party vendor relationship the prompt explicitly instructed the agent never to mention</li>
+                    <li>Internal platform architecture — document handling, citation structure, and internal identifier formats</li>
+                </ul>
+                <p>My recommendations went beyond the single agent: audit every agent on the platform with the same extraction prompt to establish whether the issue was systemic, filter known extraction patterns at the platform layer rather than per-agent, and treat the prompt layer as non-confidential by design — no vendor names, no secrets, nothing that cannot survive disclosure.</p>
+                <p>Another researcher had reported the same issue first, so the report was closed as a duplicate.</p>
+                <dl class="meta">
+                    <dt>Class</dt><dd>Improper neutralisation of input used for LLM prompting (CWE-1427)</dd>
+                    <dt>Mapping</dt><dd>OWASP LLM Top 10 — System Prompt Leakage; MITRE ATLAS</dd>
+                    <dt>Severity</dt><dd>CVSS 3.1 — 3.5 Low</dd>
+                    <dt>Date</dt><dd>May 2026</dd>
+                </dl>
+            </article>
+
+            <article class="entry">
+                <span class="disposition">Not exploitable — control confirmed effective</span>
+                <h3>Client-supplied identifier in a national-identity password reset flow</h3>
+                <p>A password reset flow authenticated by a national digital identity service also accepted a client-supplied account identifier in the request body. If the server derived the target account from that value rather than from the authenticated identity, any authenticated user could reset another user's password.</p>
+                <p>I could not prove it either way without testing against an account I did not own, which the programme rules prohibited. Rather than test anyway, I documented the attack chain, said plainly that my proof of concept only demonstrated self-context, and asked the security team for either a test account or an internal code review.</p>
+                <p>They provided a test account. I ran the cross-account test and the server rejected it — the identifier is validated against the authenticated identity server-side. I reported that my own finding was wrong and the report was closed accordingly.</p>
+                <p>One design observation survives the negative result. The identifier does not need to be in the client request at all: the server already holds the authenticated identity and can resolve the account internally. Leaving it client-controlled means correctness now depends on a validation check that must never regress — a single-layer defence where no layer was necessary. Sound implementation, avoidable design surface.</p>
+                <dl class="meta">
+                    <dt>Class</dt><dd>Hypothesised authorization bypass through user-controlled key (CWE-639)</dd>
+                    <dt>Method</dt><dd>Mid-flow interception of the authentication callback</dd>
+                    <dt>Outcome</dt><dd>Server-side validation verified present and effective</dd>
+                    <dt>Date</dt><dd>May–June 2026</dd>
+                </dl>
+            </article>
+        </section>
+        <!-- Core Expertise Section -->
+        <section>
+            <h2>Core Expertise</h2>
+            <div class="tags">
+                <span>Securing AI Systems &amp; Agents</span>
+                <span>Enterprise Architecture</span>
+                <span>Cloud Security</span>
+                <span>Risk Governance</span>
+                <span>Zero Trust</span>
+            </div>
+        </section>
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 Darmintra Tandrawijaya · Built with plain HTML &amp; CSS · Hosted on GitHub Pages</p>
         </footer>
     </div>
 </body>
