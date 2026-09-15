@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Securing an AI Agent, Derived Top-Down - Darmintra Tandrawijaya</title>
+    <meta name="description" content="Applying SABSA layering to an AI agent with tool access: deriving security controls from business risk rather than from a checklist.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Back link -->
+        <p class="back"><a href="index.html">&larr; Darmintra Tandrawijaya</a></p>
+
+        <!-- Article header -->
+        <header class="article-header">
+            <h1>Securing an AI Agent, Derived Top-Down</h1>
+            <p class="standfirst">Most AI security advice starts in the wrong place. This is an attempt to start it somewhere better.</p>
+            <p class="byline">September 2026</p>
+        </header>
+
+        <article>
+            <section>
+                <h2>The problem with control lists</h2>
+                <p>You see a lot of lists. Block prompt injection. Filter the outputs. Scope your tool permissions. All of it is reasonable advice. None of it tells you where the list came from, or how you would know if something was missing.</p>
+                <p>That gap matters more for AI systems than for most things, because there is no mature control catalogue yet. In network security you can reach for a known baseline. With an agent that can call tools, you are often designing controls that have no established reference. Which is exactly the situation where you need a method for deriving controls, not a list to copy.</p>
+                <p>So I went back to SABSA. It dates from the mid-1990s and was never written with AI in mind, and that is sort of why it works. It is framework-agnostic and traceability-driven: you start from business drivers and derive downward, with every control traceable back to the risk it addresses.</p>
+            </section>
+
+            <section>
+                <h2>The layering</h2>
+                <figure>
+                    <img src="assets/images/sabsa-ai-agent.png" alt="Diagram: five stacked SABSA layers from contextual business drivers down to component-level products, with a service management layer running vertically across all five.">
+                </figure>
+                <p>Five layers running top to bottom, with a sixth &mdash; service management, also called the operational layer &mdash; drawn vertically across them. That vertical placement comes from Sherwood's own formulation: operational concerns have to be considered during the design of each of the other five layers, not bolted on after them.</p>
+            </section>
+
+            <section>
+                <h2>Contextual &mdash; what is this for, and what can we afford to lose?</h2>
+                <p>The business view, and not yet a security question. You are establishing the agent's purpose, its decision authority (does it advise a human, draft an action for approval, or execute autonomously), the data classifications it touches, and which failure modes the business actually fears.</p>
+                <p>The useful thing to press on here is not "what is the worst that could happen." Traditional systems fail visibly. AI agents fail plausibly. The better question is "what is the worst thing that could happen while looking completely normal," and it tends to change a stakeholder's stated risk appetite considerably.</p>
+                <p>The output is a small number of written appetite statements someone senior signs. Not a control list.</p>
+            </section>
+
+            <section>
+                <h2>Conceptual &mdash; what does "secure" mean here, measurably?</h2>
+                <p>The architect's view, and the layer that earns SABSA its keep. This is where the business attributes profile lives, and it solves a problem the AI security field has not solved well: how do you measure whether an AI system is secure?</p>
+                <p>Attributes give you targets instead of intentions. For an agent:</p>
+                <ul>
+                    <li><strong>Bounded</strong> &mdash; percentage of actions within the defined policy envelope</li>
+                    <li><strong>Non-manipulable</strong> &mdash; red-team injection success rate below a threshold</li>
+                    <li><strong>Least-privileged</strong> &mdash; tool count per agent, permission drift over time</li>
+                    <li><strong>Traceable</strong> &mdash; percentage of actions with complete audit lineage</li>
+                    <li><strong>Accountable</strong> &mdash; percentage of high-impact actions carrying human approval</li>
+                </ul>
+                <p>"Non-manipulable, with a red-team success rate under X per test cycle" is something you can test and hand to an auditor. "We use guardrails" is not.</p>
+            </section>
+
+            <section>
+                <h2>Logical &mdash; where are the trust boundaries?</h2>
+                <p>The designer's view. For an agent the zones are: system prompt and configuration, user input, retrieved context, the tool invocation layer, and downstream systems.</p>
+                <p>Retrieved context is the one people get wrong. It is untrusted, and it is the indirect injection vector. The tool invocation layer is where the blast radius actually lives.</p>
+                <p>The security services sitting on those boundaries are input and output mediation, context provenance, session isolation, audit lineage, and an authorisation decision service that evaluates each tool call explicitly rather than letting the model infer permission. If you have worked with Zero Trust, the mapping is direct: the tool invocation layer is a policy enforcement point, and the authorisation service is the policy decision point.</p>
+            </section>
+
+            <section>
+                <h2>Physical &mdash; what enforces it?</h2>
+                <p>The builder's view. Injection classifiers and guardrail models. Per-tool scoped identity rather than one shared service principal. Secrets held outside the prompt layer entirely. Schema-enforced output so the agent cannot emit free-form instructions downstream. Private networking. Per-session rate and cost budgets. An approval gate on anything irreversible. And an immutable log that captures prompt, response and tool call together, because separately they are much less useful.</p>
+                <p>Worth distinguishing preventive from detective controls explicitly at this layer. A permission boundary that holds even if a policy is later loosened is a different kind of assurance from an alert that fires after the fact.</p>
+            </section>
+
+            <section>
+                <h2>Component &mdash; which products?</h2>
+                <p>The tradesman's view, and deliberately last. Guardrail services, model scanners, an AI gateway, a policy engine, observability tooling wired into a SIEM.</p>
+                <p>This is the layer that changes fastest and matters least architecturally. Keep it in a separately versioned document so a vendor change does not require reopening your policy. Naming it as the layer you would decide last and revisit most often is itself a design position.</p>
+            </section>
+
+            <section>
+                <h2>Service management &mdash; how is it run and changed?</h2>
+                <p>The facilities manager's view. Red-team cadence tied to model and prompt changes. An evaluation regression suite gating deployments. Detection for injection patterns, anomalous tool-call sequences and cost exhaustion. Incident response playbooks for agent misbehaviour. Third-party model supply chain review.</p>
+                <p>One AI-specific point that catches people out: vendor-side model updates can silently invalidate your entire control set without anyone touching your architecture. If model and prompt changes are not in scope of your change management process, they need to be.</p>
+                <p>SABSA also defines a separate Service Management Matrix &mdash; the operational layer analysed against the same six interrogatives. For an agent that distinction is useful, because who retunes the guardrails, when the evaluation suite runs, and where model changes get approved are a different set of cells from the design questions.</p>
+            </section>
+
+            <section>
+                <h2>Where my own findings sit</h2>
+                <p>Two submissions from authorised bug bounty work map onto this, which is part of why I find the layering useful.</p>
+                <p>A system prompt disclosure in a production LLM agent is a failure of the <strong>Confidential</strong> attribute, caused by a trust boundary breach between user input and system configuration at the logical layer, remediated at the physical layer through output mediation.</p>
+                <p>A client-supplied account identifier in an authentication flow &mdash; which turned out to be correctly validated server-side, so not exploitable &mdash; is a <strong>Least-privileged</strong> question: an authorisation decision that should never have been reachable from client input in the first place.</p>
+                <p>The second one is the more interesting for agents. The same question restated is: when an agent calls a tool, whose authority is it using? A shared service principal means any user can reach whatever the agent can reach. That is the same authorisation-bypass class, with an agent in the middle.</p>
+            </section>
+
+            <section>
+                <h2>Mapping it into an organisation</h2>
+                <p>The mistake is treating the layers as a new process. They are not. They are artefacts that existing governance gates consume.</p>
+                <table>
+                    <thead>
+                        <tr><th>Layer</th><th>Owner</th><th>Artefact</th><th>Plugs into</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Contextual</td><td>Business sponsor, CISO</td><td>Risk appetite statement</td><td>Project intake, DPIA, AI use case register</td></tr>
+                        <tr><td>Conceptual</td><td>Security architect</td><td>Attributes profile with metrics</td><td>Risk register, KRIs, audit control objectives</td></tr>
+                        <tr><td>Logical</td><td>Security and solution architect</td><td>Trust boundary diagram, threat model</td><td>Architecture review board gate, SDLC design</td></tr>
+                        <tr><td>Physical</td><td>Security engineering, platform</td><td>Control specs, reference architecture, IaC</td><td>Secure baselines, paved road, CI/CD gates</td></tr>
+                        <tr><td>Component</td><td>Engineering, procurement</td><td>Approved products, config standards</td><td>Third-party risk, tech radar, exceptions</td></tr>
+                        <tr><td>Service management</td><td>SecOps, service owner</td><td>Runbooks, detections, eval suite</td><td>Change management, IR, SOC backlog</td></tr>
+                    </tbody>
+                </table>
+                <p>If you are adopting this, do not roll out six layers. Start with the conceptual one. The attributes profile is the smallest artefact with the highest leverage, and it immediately gives every other layer something to justify itself against.</p>
+                <p>The biggest structural win is at the physical layer: turn the controls into a reusable platform pattern so product teams inherit guardrails, scoped identity and logging rather than implementing them per project. Controls teams have to build themselves do not get built. Controls that come with the paved road do.</p>
+            </section>
+
+            <section>
+                <h2>What I would do differently</h2>
+                <p>Two things I got wrong when I started thinking about this.</p>
+                <p>I treated retrieved context as trusted. It is not, and indirect injection through a document the agent was told to read is considerably harder to reason about than a user typing something adversarial.</p>
+                <p>And I specified controls before I could say what business risk each one addressed. That works until someone senior asks why a control exists and you find you do not have an answer you believe. Deriving downward is slower and produces fewer controls. They are easier to defend.</p>
+                <p>What is still open: the metrics in the conceptual layer are easy to write and harder to instrument honestly. A red-team success rate is only meaningful relative to the effort behind the red teaming, and I do not yet have a good answer for normalising that.</p>
+            </section>
+
+            <section>
+                <h2>References</h2>
+                <ul class="refs">
+                    <li>Sherwood, Clark and Lynas, <em>Enterprise Security Architecture: A Business-Driven Approach</em></li>
+                    <li>OWASP Top 10 for Large Language Model Applications</li>
+                    <li>MITRE ATLAS</li>
+                    <li>NIST AI Risk Management Framework</li>
+                </ul>
+            </section>
+        </article>
+
+        <footer>
+            <p><a href="index.html">&larr; Back to home</a></p>
+            <p>&copy; 2026 Darmintra Tandrawijaya &middot; Built with plain HTML &amp; CSS &middot; Hosted on GitHub Pages</p>
+        </footer>
+    </div>
+</body>
+</html>
